@@ -66,6 +66,10 @@ export const applyDocumentFilters = (
     const shadowFactor = adjustments.shadows / 100;
     const highlightFactor = adjustments.highlights / 100;
 
+    let pixelLuminance = 0;
+    let adjustFactor = 0;
+    let grayVal = 0;
+
     for (let i = 0; i < len; i += 4) {
       let r = data[i];
       let g = data[i + 1];
@@ -178,22 +182,22 @@ export const applyDocumentFilters = (
       b = (b - 128) * contrastFactor + 128;
 
       // 4. Shadows & Highlights
-      const lum = (r + g + b) / 3;
-      if (lum < 128) {
-        const factor = (128 - lum) / 128 * shadowFactor * 40;
-        r += factor;
-        g += factor;
-        b += factor;
+      pixelLuminance = (r + g + b) / 3;
+      if (pixelLuminance < 128) {
+        adjustFactor = ((128 - pixelLuminance) / 128) * shadowFactor * 40;
+        r += adjustFactor;
+        g += adjustFactor;
+        b += adjustFactor;
       } else {
-        const factor = (lum - 128) / 128 * highlightFactor * 40;
-        r -= factor;
-        g -= factor;
-        b -= factor;
+        adjustFactor = ((pixelLuminance - 128) / 128) * highlightFactor * 40;
+        r -= adjustFactor;
+        g -= adjustFactor;
+        b -= adjustFactor;
       }
 
       // 5. Saturation
       if (satFactor !== 1) {
-        const grayVal = 0.299 * r + 0.587 * g + 0.114 * b;
+        grayVal = 0.299 * r + 0.587 * g + 0.114 * b;
         r = grayVal + (r - grayVal) * satFactor;
         g = grayVal + (g - grayVal) * satFactor;
         b = grayVal + (b - grayVal) * satFactor;
