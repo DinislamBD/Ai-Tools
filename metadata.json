@@ -1,0 +1,6 @@
+{
+  "name": "DocuScan AI",
+  "description": "Premium AI Document Scanner & PDF Utility for iPhone with boundary detection, OCR, PDF tools, annotations, and digital signatures.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
