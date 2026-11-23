@@ -67,7 +67,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             </div>
             <div>
               <h4 className="text-sm font-bold flex items-center gap-1.5">
-                <span>{current.isPro ? 'DocuScan AI Pro Active' : 'Upgrade to Pro'}</span>
+                <span>Subscription demonstration</span>
                 {!current.isPro && (
                   <span className="text-[10px] bg-amber-400 text-neutral-900 font-extrabold px-1.5 py-0.2 rounded-full">
                     50% OFF
@@ -75,7 +75,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
                 )}
               </h4>
               <p className="text-xs text-blue-100 mt-0.5">
-                {current.isPro ? 'All premium tools unlocked' : 'Unlimited scanning & full OCR suite'}
+                Paid plans are not available in this web demo
               </p>
             </div>
           </div>
@@ -131,14 +131,14 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
               <div className="flex items-center gap-2.5">
                 <Lock size={16} className="text-blue-600" />
                 <div>
-                  <h5 className="font-semibold text-neutral-800">App Passcode Lock</h5>
-                  <p className="text-[11px] text-neutral-500">Require PIN code on startup</p>
+                  <h5 className="font-semibold text-neutral-800">App lock not available</h5>
+                  <p className="text-[11px] text-neutral-500">Browser data is not encrypted; do not store sensitive documents</p>
                 </div>
               </div>
               <input
                 type="checkbox"
-                checked={current.securityLock}
-                onChange={(e) => updateSetting('securityLock', e.target.checked)}
+                disabled
+                checked={false}
                 className="w-5 h-5 accent-blue-600 rounded cursor-pointer"
               />
             </div>
@@ -148,14 +148,14 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
               <div className="flex items-center gap-2.5">
                 <ScanFace size={16} className="text-indigo-600" />
                 <div>
-                  <h5 className="font-semibold text-neutral-800">Face ID Biometrics</h5>
+                  <h5 className="font-semibold text-neutral-800">Face ID unavailable</h5>
                   <p className="text-[11px] text-neutral-500">Unlock scanner with Face ID</p>
                 </div>
               </div>
               <input
                 type="checkbox"
-                checked={current.faceIdEnabled}
-                onChange={(e) => updateSetting('faceIdEnabled', e.target.checked)}
+                disabled
+                checked={false}
                 className="w-5 h-5 accent-blue-600 rounded cursor-pointer"
               />
             </div>
@@ -207,8 +207,8 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
         {/* About App */}
         <div className="text-center py-3 text-neutral-400 text-xs space-y-1">
           <p className="font-semibold text-neutral-600">DocuScan AI for iOS</p>
-          <p className="text-[11px]">Version 1.0.0 (Build 42) • Made with Swift &amp; VisionKit</p>
-          <p className="text-[10px] text-neutral-400">100% On-Device Confidentiality Guarantee</p>
+          <p className="text-[11px]">Open-source browser prototype (React + TypeScript)</p>
+          <p className="text-[10px] text-neutral-400">Browser localStorage is unencrypted. Do not save sensitive information.</p>
         </div>
       </div>
     </div>
