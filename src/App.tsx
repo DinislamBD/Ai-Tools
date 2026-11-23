@@ -60,9 +60,9 @@ export default function App() {
 
     // Check onboarding & security lock
     const timer = setTimeout(() => {
-      if (loadedSettings.securityLock || loadedSettings.biometricLockEnabled) {
-        setScreen('locked');
-      } else if (!StorageService.isOnboardingDone()) {
+      // The web demo does not offer secure device authentication or encrypted storage.
+      // Do not gate user data behind a simulated passcode or Face ID screen.
+      if (!StorageService.isOnboardingDone()) {
         setScreen('onboarding');
       } else {
         setScreen('main');
@@ -272,9 +272,7 @@ export default function App() {
       {screen === 'splash' && (
         <SplashScreen
           onFinish={() => {
-            if (settings.securityLock || settings.biometricLockEnabled) {
-              setScreen('locked');
-            } else if (!StorageService.isOnboardingDone()) {
+            if (!StorageService.isOnboardingDone()) {
               setScreen('onboarding');
             } else {
               setScreen('main');
@@ -642,22 +640,12 @@ export default function App() {
           onDismiss={() => setScreen('main')}
           onSubscribe={(tier) => {
             playHaptic('success');
-            const updatedSettings: AppSettings = {
-              ...settings,
-              isPro: true,
-              subscriptionPlan: tier === 'annual' ? 'yearly' : tier,
-            };
-            setSettings(updatedSettings);
-            StorageService.saveSettings(updatedSettings);
-            alert(`Welcome to DocuScan AI Pro! (${tier.toUpperCase()})`);
+            alert('This is a web demo. No payment is processed and no paid entitlement is activated.');
             setScreen('main');
           }}
           onRestore={() => {
             playHaptic('success');
-            alert('Purchases restored. You are an active Pro member.');
-            const updatedSettings: AppSettings = { ...settings, isPro: true };
-            setSettings(updatedSettings);
-            StorageService.saveSettings(updatedSettings);
+            alert('Purchase restoration is not available in this web demo.');
             setScreen('main');
           }}
         />
