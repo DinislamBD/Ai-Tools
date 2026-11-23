@@ -60,9 +60,9 @@ export default function App() {
 
     // Check onboarding & security lock
     const timer = setTimeout(() => {
-      if (loadedSettings.securityLock || loadedSettings.biometricLockEnabled) {
-        setScreen('locked');
-      } else if (!StorageService.isOnboardingDone()) {
+      // The web demo does not offer secure device authentication or encrypted storage.
+      // Do not gate user data behind a simulated passcode or Face ID screen.
+      if (!StorageService.isOnboardingDone()) {
         setScreen('onboarding');
       } else {
         setScreen('main');
@@ -163,6 +163,10 @@ export default function App() {
 
   // Import file from photo library / files
   const handleImportFile = (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file. Importing existing PDFs is not yet supported in this web prototype.');
+      return;
+    }
     playHaptic('success');
     const reader = new FileReader();
     reader.onload = () => {
@@ -176,7 +180,7 @@ export default function App() {
         filter: 'original',
         adjustments: { brightness: 0, contrast: 0, saturation: 0, sharpness: 0, exposure: 0, shadows: 0, highlights: 0 },
         rotation: 0,
-        ocrText: 'Imported image document.',
+        ocrText: undefined,
       };
 
       const newDoc: DocumentItem = {
@@ -190,7 +194,7 @@ export default function App() {
         isDeleted: false,
         fileSize: file.size || 250000,
         docType: 'document',
-        ocrFullText: 'Imported file scan.',
+        ocrFullText: '',
         metadata: {
           title: file.name,
           creationDate: new Date().toISOString(),
@@ -272,9 +276,7 @@ export default function App() {
       {screen === 'splash' && (
         <SplashScreen
           onFinish={() => {
-            if (settings.securityLock || settings.biometricLockEnabled) {
-              setScreen('locked');
-            } else if (!StorageService.isOnboardingDone()) {
+            if (!StorageService.isOnboardingDone()) {
               setScreen('onboarding');
             } else {
               setScreen('main');
@@ -642,22 +644,12 @@ export default function App() {
           onDismiss={() => setScreen('main')}
           onSubscribe={(tier) => {
             playHaptic('success');
-            const updatedSettings: AppSettings = {
-              ...settings,
-              isPro: true,
-              subscriptionPlan: tier === 'annual' ? 'yearly' : tier,
-            };
-            setSettings(updatedSettings);
-            StorageService.saveSettings(updatedSettings);
-            alert(`Welcome to DocuScan AI Pro! (${tier.toUpperCase()})`);
+            alert('This is a web demo. No payment is processed and no paid entitlement is activated.');
             setScreen('main');
           }}
           onRestore={() => {
             playHaptic('success');
-            alert('Purchases restored. You are an active Pro member.');
-            const updatedSettings: AppSettings = { ...settings, isPro: true };
-            setSettings(updatedSettings);
-            StorageService.saveSettings(updatedSettings);
+            alert('Purchase restoration is not available in this web demo.');
             setScreen('main');
           }}
         />

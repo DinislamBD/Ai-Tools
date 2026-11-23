@@ -17,11 +17,11 @@ export const SubscriptionPaywallScreen: React.FC<SubscriptionPaywallScreenProps>
 
   const proFeatures = [
     'Unlimited HD Document & Batch Scanning',
-    'High-Precision Vision OCR in 8+ Languages',
+    'Browser-based Tesseract.js OCR in 8 languages',
     'No Watermarks on Exported PDF Files',
     'Digital Signatures & Apple Pencil Annotation',
     'PDF Suite: Merge, Split & Smart Compression',
-    'Biometric App Lock & Encrypted Vault',
+    'Document management demo (not an encrypted vault)',
   ];
 
   return (
@@ -43,9 +43,9 @@ export const SubscriptionPaywallScreen: React.FC<SubscriptionPaywallScreenProps>
         <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center text-neutral-950 shadow-xl shadow-amber-500/20 mb-3">
           <Crown size={28} />
         </div>
-        <h2 className="text-xl font-extrabold tracking-tight">DocuScan AI Pro</h2>
+        <h2 className="text-xl font-extrabold tracking-tight">Subscription UI demonstration</h2>
         <p className="text-xs text-neutral-400 mt-1 max-w-[260px]">
-          Unlock unlimited document scanning, full OCR, and professional PDF utilities.
+          Illustrative plans only. Purchases and trials are not implemented in this web prototype.
         </p>
       </div>
 
@@ -153,7 +153,7 @@ export const SubscriptionPaywallScreen: React.FC<SubscriptionPaywallScreenProps>
           }}
           className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-sm shadow-xl shadow-blue-600/30 active:scale-[0.98] transition cursor-pointer"
         >
-          {selectedTier === 'annual' ? 'Start 3-Day Free Trial' : 'Continue'}
+          {selectedTier === 'annual' ? 'View Demo Notice' : 'View Demo Notice'}
         </button>
 
         <div className="flex items-center justify-center gap-4 text-[11px] text-neutral-500">
@@ -164,14 +164,14 @@ export const SubscriptionPaywallScreen: React.FC<SubscriptionPaywallScreenProps>
             }}
             className="hover:text-neutral-300 transition cursor-pointer"
           >
-            Restore Purchases
+            Restoration unavailable
           </button>
           <span>•</span>
           <a href="#" onClick={(e) => { e.preventDefault(); alert('Terms of Service: Standard Apple EULA applies.'); }} className="hover:text-neutral-300 transition">
             Terms of Use
           </a>
           <span>•</span>
-          <a href="#" onClick={(e) => { e.preventDefault(); alert('Privacy Policy: All document scanning and OCR is performed 100% locally on your device.'); }} className="hover:text-neutral-300 transition">
+          <a href="#" onClick={(e) => { e.preventDefault(); alert('Privacy notice: Images and OCR results are stored in unencrypted browser storage. OCR language models may be downloaded from a CDN.'); }} className="hover:text-neutral-300 transition">
             Privacy Policy
           </a>
         </div>

@@ -30,6 +30,7 @@ export const OCRScreen: React.FC<OCRScreenProps> = ({
   const [extractedText, setExtractedText] = useState(page.ocrText || '');
   const [isLoading, setIsLoading] = useState(!page.ocrText);
   const [ocrData, setOcrData] = useState<OCRResultData | null>(null);
+  const [ocrError, setOcrError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isEditing, setIsEditing] = useState(false);
@@ -39,11 +40,20 @@ export const OCRScreen: React.FC<OCRScreenProps> = ({
 
     async function runRecognition() {
       setIsLoading(true);
-      const res = await performOCR(page.enhancedImage || page.originalImage, selectedLang, page.ocrText);
-      if (active) {
-        setOcrData(res);
-        setExtractedText(res.fullText);
-        setIsLoading(false);
+      setOcrError(null);
+      try {
+        const res = await performOCR(page.enhancedImage || page.originalImage, selectedLang, page.ocrText);
+        if (active) {
+          setOcrData(res);
+          setExtractedText(res.fullText);
+        }
+      } catch (error) {
+        if (active) {
+          setOcrError(error instanceof Error ? error.message : 'Unable to recognize text.');
+          setIsEditing(true);
+        }
+      } finally {
+        if (active) setIsLoading(false);
       }
     }
 
@@ -154,7 +164,7 @@ export const OCRScreen: React.FC<OCRScreenProps> = ({
 
         <div className="flex items-center gap-1 text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
           <Sparkles size={11} />
-          <span>{isLoading ? 'Recognizing...' : `${Math.round((ocrData?.confidence || 0.98) * 100)}% Confidence`}</span>
+          <span>{isLoading ? 'Recognizing...' : ocrError ? 'OCR unavailable' : ocrData?.fromSavedText ? 'Saved text' : ocrData ? `${Math.round(ocrData.confidence * 100)}% Confidence` : 'No result'}</span>
         </div>
       </div>
 
@@ -178,7 +188,7 @@ export const OCRScreen: React.FC<OCRScreenProps> = ({
           <div className="flex items-center justify-between mb-3 pb-2 border-b border-neutral-100 text-xs text-neutral-400 font-medium">
             <span className="flex items-center gap-1">
               <FileText size={13} />
-              <span>Apple Vision Recognition Engine</span>
+              <span>Tesseract.js Browser OCR</span>
             </span>
             <button
               onClick={() => {
@@ -195,15 +205,18 @@ export const OCRScreen: React.FC<OCRScreenProps> = ({
           {isLoading ? (
             <div className="py-16 flex flex-col items-center justify-center text-neutral-400 gap-3">
               <div className="w-8 h-8 rounded-full border-2 border-blue-600 border-t-transparent animate-spin" />
-              <span className="text-xs font-semibold">Running VNRecognizeTextRequest...</span>
+              <span className="text-xs font-semibold">Loading OCR model and recognizing text...</span>
             </div>
           ) : isEditing ? (
+            <div className="w-full">
+              {ocrError && <p role="alert" className="text-xs text-rose-700 mb-2">OCR failed: {ocrError}. You can type the text manually below.</p>}
             <textarea
               value={extractedText}
               onChange={(e) => setExtractedText(e.target.value)}
               className="w-full h-80 p-2 text-sm text-neutral-800 leading-relaxed font-sans border-0 focus:ring-0 focus:outline-hidden resize-none"
               placeholder="Type or edit extracted OCR text..."
             />
+            </div>
           ) : (
             renderHighlightedText()
           )}

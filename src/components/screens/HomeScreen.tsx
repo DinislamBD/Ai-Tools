@@ -182,7 +182,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
           <input
             id="file-import-input"
             type="file"
-            accept="image/*,application/pdf"
+            accept="image/*"
             className="hidden"
             onChange={handleFileUpload}
           />
