@@ -146,6 +146,10 @@ export const splitDocument = (
   doc: DocumentItem,
   splitPageNumber: number
 ): [DocumentItem, DocumentItem] => {
+  if (!Number.isInteger(splitPageNumber) || splitPageNumber < 1 || splitPageNumber >= doc.pages.length) {
+    throw new RangeError('Split point must be between the first and last page.');
+  }
+
   const pages1 = doc.pages.slice(0, splitPageNumber).map((p, i) => ({ ...p, pageNumber: i + 1 }));
   const pages2 = doc.pages.slice(splitPageNumber).map((p, i) => ({ ...p, pageNumber: i + 1 }));
 
