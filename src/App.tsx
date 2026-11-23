@@ -163,6 +163,10 @@ export default function App() {
 
   // Import file from photo library / files
   const handleImportFile = (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file. Importing existing PDFs is not yet supported in this web prototype.');
+      return;
+    }
     playHaptic('success');
     const reader = new FileReader();
     reader.onload = () => {
@@ -176,7 +180,7 @@ export default function App() {
         filter: 'original',
         adjustments: { brightness: 0, contrast: 0, saturation: 0, sharpness: 0, exposure: 0, shadows: 0, highlights: 0 },
         rotation: 0,
-        ocrText: 'Imported image document.',
+        ocrText: undefined,
       };
 
       const newDoc: DocumentItem = {
@@ -190,7 +194,7 @@ export default function App() {
         isDeleted: false,
         fileSize: file.size || 250000,
         docType: 'document',
-        ocrFullText: 'Imported file scan.',
+        ocrFullText: '',
         metadata: {
           title: file.name,
           creationDate: new Date().toISOString(),
